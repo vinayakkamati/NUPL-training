@@ -18,9 +18,9 @@ public class TestLoader implements ApplicationContextAware {
 
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-        projectRepository.save(new Project("My project", LocalDate.now()));
-        projectRepository.save(new Project("My project2", LocalDate.now()));
-        projectRepository.save(new Project("My project3", LocalDate.now()));
-        projectRepository.save(new Project("My project4", LocalDate.now()));
+        projectRepository.save(new Project(1L,"My project", LocalDate.now()));
+        projectRepository.save(new Project(2L, "My project2", LocalDate.now()));
+        projectRepository.save(new Project(3L,"My project3", LocalDate.now()));
+        projectRepository.save(new Project(4L,"My project4", LocalDate.now()));
     }
 }
