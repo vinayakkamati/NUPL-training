@@ -21,14 +21,22 @@ class IProjectRepositoryImplTest {
     @Test
     void findById() {
         Project project = new Project(2L, "name", LocalDate.now());
-        projectRepository.saveProject(project);
+        projectRepository.save(project);
         Optional<Project> savedProject = projectRepository.findById(project.getId());
-        assertEquals(savedProject.get(),project);
+        assertEquals(savedProject.get().getName(),project.getName());
+    }
+
+    @Test
+    void findByName() {
+        Project project = new Project(2L, "name", LocalDate.now());
+        projectRepository.save(project);
+        Optional<Project> savedProject = projectRepository.findByName(project.getName());
+        assertEquals(savedProject.get().getDateCreated(),project.getDateCreated());
     }
 
     @Test
     void saveProject() {
         Project project = new Project(2L, "name", LocalDate.now());
-        assertNotNull(projectRepository.saveProject(project));
+        assertNotNull(projectRepository.save(project));
     }
 }
