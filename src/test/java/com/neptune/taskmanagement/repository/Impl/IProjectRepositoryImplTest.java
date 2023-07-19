@@ -47,11 +47,11 @@ class IProjectRepositoryImplTest {
         Project oldProject = new Project(2L, "name", LocalDate.now().minusYears(1));
         projectRepository.save(oldProject);
 
-        Project newProject = new Project(2L, "name", LocalDate.now());
+        Project newProject = new Project(2L, "name3", LocalDate.now());
         projectRepository.save(newProject);
 
 
-        Project newProject2 = new Project(2L, "name", LocalDate.now());
+        Project newProject2 = new Project(2L, "name2", LocalDate.now());
         projectRepository.save(newProject2);
 
         List<Project> savedProject = projectRepository
