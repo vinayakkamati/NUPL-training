@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -38,5 +39,24 @@ class IProjectRepositoryImplTest {
     void saveProject() {
         Project project = new Project(2L, "name", LocalDate.now());
         assertNotNull(projectRepository.save(project));
+    }
+
+
+    @Test
+    void findByDateCreatedBetween() {
+        Project oldProject = new Project(2L, "name", LocalDate.now().minusYears(1));
+        projectRepository.save(oldProject);
+
+        Project newProject = new Project(2L, "name", LocalDate.now());
+        projectRepository.save(newProject);
+
+
+        Project newProject2 = new Project(2L, "name", LocalDate.now());
+        projectRepository.save(newProject2);
+
+        List<Project> savedProject = projectRepository
+                .findByDateCreatedBetween(LocalDate.now().minusDays(1), LocalDate.now().plusDays(1));
+
+        assertEquals(savedProject.size(), 2);
     }
 }
