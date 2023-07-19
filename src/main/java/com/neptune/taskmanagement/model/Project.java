@@ -1,6 +1,8 @@
 package com.neptune.taskmanagement.model;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import java.time.LocalDate;
 
@@ -8,11 +10,10 @@ import java.time.LocalDate;
 public class Project {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String name;
     private LocalDate dateCreated;
-
-    private String internalId;
 
     public Project() {
     }
@@ -26,14 +27,6 @@ public class Project {
         this.id = id;
         this.name = name;
         this.dateCreated = localDate;
-    }
-
-    public String getInternalId() {
-        return internalId;
-    }
-
-    public void setInternalId(String internalId) {
-        this.internalId = internalId;
     }
 
     public Project(Project project) {
