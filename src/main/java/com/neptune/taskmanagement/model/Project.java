@@ -1,10 +1,8 @@
 package com.neptune.taskmanagement.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.Set;
 
 @Entity
 public class Project {
@@ -15,12 +13,23 @@ public class Project {
     private String name;
     private LocalDate dateCreated;
 
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name = "project_id")
+    private Set<Task> tasks;
+
     public Project() {
     }
 
     public Project(String name, LocalDate localDate) {
         this.name = name;
         this.dateCreated = localDate;
+    }
+
+    public Project(Long id, String name, LocalDate dateCreated, Set<Task> tasks) {
+        this.id = id;
+        this.name = name;
+        this.dateCreated = dateCreated;
+        this.tasks = tasks;
     }
 
     public Project(Long id, String name, LocalDate localDate) {
@@ -31,6 +40,14 @@ public class Project {
 
     public Project(Project project) {
         this(project.getId(), project.getName(), project.getDateCreated());
+    }
+
+    public Set<Task> getTasks() {
+        return tasks;
+    }
+
+    public void setTasks(Set<Task> tasks) {
+        this.tasks = tasks;
     }
 
     public Long getId() {
@@ -62,7 +79,8 @@ public class Project {
         return "Project{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", localDate=" + dateCreated +
+                ", dateCreated=" + dateCreated +
+                ", tasks=" + tasks +
                 '}';
     }
 }
