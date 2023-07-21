@@ -1,8 +1,12 @@
 package com.neptune.taskmanagement.dto;
 
 
+import javax.validation.constraints.NotBlank;
+
 public class ProjectDto {
     private Long id;
+
+    @NotBlank
     private String name;
     private String dateCreated;
 

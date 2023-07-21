@@ -5,11 +5,19 @@ import com.neptune.taskmanagement.mapper.ProjectMapper;
 import com.neptune.taskmanagement.model.Project;
 import com.neptune.taskmanagement.service.IProjectService;
 import org.mapstruct.factory.Mappers;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
-@RestController
+import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.List;
+
+@Controller
 @RequestMapping(value = "/projects")
 public class ProjectController {
 
@@ -21,15 +29,26 @@ public class ProjectController {
         this.iProjectService = iProjectService;
     }
 
-    @GetMapping(value = "/{id}")
-    public ProjectDto findOne(@PathVariable Long id){
-        Project project = iProjectService.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-        return projectMapper.ProjectToDto(project);
+    @GetMapping
+    public String getProjects(Model model) {
+        Iterable<Project> projects = iProjectService.findAll();
+        List<ProjectDto> projectDtos = new ArrayList<>();
+        projects.forEach(p -> projectDtos.add(projectMapper.ProjectToDto(p)));
+
+        model.addAttribute("projects", projectDtos);
+        return "projects";
     }
 
-    @PostMapping(value = "/create")
-    public void createProject(@RequestBody ProjectDto projectDto){
+    @GetMapping("/new")
+    public String newProject(Model model){
+        model.addAttribute("project", new ProjectDto());
+        return "new-project";
+    }
 
+    @PostMapping
+    public String addProject(@Valid @ModelAttribute("project") ProjectDto projectDto, BindingResult bindingResult){
+        if(bindingResult.hasErrors()) return "new-project";
         iProjectService.saveProject(projectMapper.DtoToProject(projectDto));
+        return "redirect:/projects";
     }
 }
