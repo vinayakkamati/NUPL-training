@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.Thymleaf.org">
+<head>
+    <title>Add project</title>
+</head>
+<body>
+    <form method ="POST" th:action="@{/projects}" th:object="${project}">
+        <label for="name">Name</label>
+        <input type="text" id="name" th:field="*{name}">
+        <input type="submit" value="Save project">
+        <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></p>
+    </form>
+</body>
+</html>

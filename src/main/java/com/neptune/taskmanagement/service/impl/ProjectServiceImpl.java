@@ -39,6 +39,7 @@ public class ProjectServiceImpl implements IProjectService {
     @Override
     public Project saveProject(Project project) {
         LOG.debug("Finding Project " + project);
+        project.setDateCreated(LocalDate.now());
         return iProjectRepository.save(project);
     }
 
