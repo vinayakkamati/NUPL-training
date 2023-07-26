@@ -67,4 +67,14 @@ public class ProjectServiceImpl implements IProjectService {
     public Iterable<Project> findAll() {
         return iProjectRepository.findAll();
     }
+
+    @Override
+    public Optional<Project> findByName(String name) {
+        return iProjectRepository.findByName(name);
+    }
+
+    @Override
+    public void deleteById(Long id) {
+        iProjectRepository.deleteById(id);
+    }
 }

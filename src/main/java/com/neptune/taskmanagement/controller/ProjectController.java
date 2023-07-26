@@ -5,19 +5,18 @@ import com.neptune.taskmanagement.mapper.ProjectMapper;
 import com.neptune.taskmanagement.model.Project;
 import com.neptune.taskmanagement.service.IProjectService;
 import org.mapstruct.factory.Mappers;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
-import javax.validation.Valid;
-import java.util.ArrayList;
-import java.util.List;
-
-@Controller
+@RestController
 @RequestMapping(value = "/projects")
 public class ProjectController {
 
@@ -29,26 +28,27 @@ public class ProjectController {
         this.iProjectService = iProjectService;
     }
 
-    @GetMapping
-    public String getProjects(Model model) {
-        Iterable<Project> projects = iProjectService.findAll();
-        List<ProjectDto> projectDtos = new ArrayList<>();
-        projects.forEach(p -> projectDtos.add(projectMapper.ProjectToDto(p)));
-
-        model.addAttribute("projects", projectDtos);
-        return "projects";
+    @GetMapping(value = "/{id}")
+    public ProjectDto findOne(@PathVariable Long id){
+        Project project = iProjectService.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,"Project not found"));
+        return projectMapper.ProjectToDto(project);
     }
 
-    @GetMapping("/new")
-    public String newProject(Model model){
-        model.addAttribute("project", new ProjectDto());
-        return "new-project";
-    }
-
-    @PostMapping
-    public String addProject(@Valid @ModelAttribute("project") ProjectDto projectDto, BindingResult bindingResult){
-        if(bindingResult.hasErrors()) return "new-project";
+    @PostMapping(value = "/create")
+    public void createProject(@RequestBody ProjectDto projectDto){
         iProjectService.saveProject(projectMapper.DtoToProject(projectDto));
-        return "redirect:/projects";
+    }
+
+    @GetMapping(value = "/name")
+    public ProjectDto findProjects(@RequestParam("name") String name) {
+        Project project = iProjectService.findByName(name).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        return projectMapper.ProjectToDto(project);
+    }
+
+    @DeleteMapping(value = "/{id}")
+    public String deleteProject(@PathVariable Long id){
+        iProjectService.deleteById(id);
+        return "Project is deleted with id "+ id;
     }
 }
