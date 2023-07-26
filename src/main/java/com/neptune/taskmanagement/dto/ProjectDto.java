@@ -14,6 +14,9 @@ public class ProjectDto {
 
     }
 
+    public ProjectDto(String name) {
+        this.name = name;
+    }
     public ProjectDto(Long id, String name, String dateCreated) {
         this.id = id;
         this.name = name;

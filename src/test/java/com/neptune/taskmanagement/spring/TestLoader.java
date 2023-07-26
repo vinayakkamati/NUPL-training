@@ -2,6 +2,7 @@ package com.neptune.taskmanagement.spring;
 
 import com.neptune.taskmanagement.model.Project;
 import com.neptune.taskmanagement.repository.IProjectRepository;
+import org.junit.jupiter.api.Disabled;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Component;
 import java.time.LocalDate;
 
 @Component
+@Disabled
 public class TestLoader implements ApplicationContextAware {
     @Autowired
     IProjectRepository projectRepository;
